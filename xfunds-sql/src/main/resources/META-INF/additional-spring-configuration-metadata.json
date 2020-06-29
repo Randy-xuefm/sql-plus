@@ -1,0 +1,28 @@
+{
+  "properties": [
+    {
+      "name": "xfunds.sql.patch.scanPackage",
+      "type": "java.lang.String",
+      "description": "sql增量文件扫描路径."
+    },
+    {
+      "name": "xfunds.sql.patch.dbType",
+      "type": "java.lang.String",
+      "description": "数据库类型ORA|MYSQL|DB2.默认ORA."
+    },
+    {
+      "name": "xfunds.sql.patch.startDate",
+      "type": "java.lang.Integer",
+      "description": "增量脚本扫描起始日期."
+    },
+    {
+      "name": "xfunds.sql.patch.endDate",
+      "type": "java.lang.Integer",
+      "description": "增量脚本扫描结束日期,默认系统日期."
+    },
+    {
+      "name": "xfunds.sql.patch.targetPackage",
+      "type": "java.lang.String",
+      "description": "将扫描到的文件复制到指定文件夹."
+    }
+  ] }

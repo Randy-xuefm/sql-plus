@@ -1,0 +1,10 @@
+xfunds:
+  sql:
+    patch:
+      scanPackage: ""
+      dbType: ""
+      startDate:
+      endDate:
+      targetPackage: ""
+
+
