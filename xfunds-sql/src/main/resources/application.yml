@@ -3,7 +3,7 @@ xfunds:
     patch:
       scanPackage: ""
       dbType: ""
-      startDate:
+      lastDate:
       endDate:
       targetPackage: ""
 

@@ -31,8 +31,6 @@ public class SqlFileScanner implements InitializingBean {
 
     private PatchConfig config;
 
-    private final String suffix = ".sql";
-
     public SqlFileScanner(PatchConfig config){
         this.config = config;
     }
@@ -63,7 +61,10 @@ public class SqlFileScanner implements InitializingBean {
     private void copy2TargetPath(List<File> sqlFileList){
         String targetDir =  this.config.getTargetPackage();
         File dir = new File(targetDir);
-        if(!dir.exists()){
+        if(dir.exists()){
+            File[] exists = dir.listFiles();
+            Arrays.stream(Optional.ofNullable(exists).orElse(new File[1])).forEach(file -> file.delete());
+        }else{
             Assert.state(dir.mkdir(),"创建文件路径失败," + targetDir);
         }
         for (File file : sqlFileList) {
