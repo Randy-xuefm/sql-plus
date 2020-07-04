@@ -32,34 +32,4 @@ public class Solution {
         }
         return -1;
     }
-
-    /**
-     * 摩尔投票算法
-     * @param nums
-     * @return
-     */
-    public static int majorityElement4moer(int[] nums){
-        if(nums == null || nums.length <= 0){
-            return -1;
-        }
-
-        Integer major = null;
-        int count =0;
-        for (int num : nums) {
-            if (major == null) {
-                major = num;
-                count = 1;
-            } else if (num != major) {
-                if(count == 1){
-                    major = null;
-                }else{
-                    count --;
-                }
-            }else {
-                count ++;
-            }
-        }
-
-        return major == null ? -1 : major;
-    }
 }
