@@ -2,6 +2,8 @@ package com.erayt.xfunds.sql.component;
 
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 /**
@@ -19,5 +21,12 @@ class DaysTest {
         assertThat(days.getDay()).isEqualTo(20);
 
         assertThat(days.getYearAndMonth()).isEqualTo("201908");
+    }
+
+    @Test
+    public void compare(){
+        assertThat(LocalDate.of(2019, 1, 2).compareTo(LocalDate.of(2019, 2, 3))).isEqualTo(-1);
+        assertThat(LocalDate.of(2019, 3, 2).compareTo(LocalDate.of(2019, 2, 3))).isEqualTo(1);
+        assertThat(LocalDate.of(2019, 1, 2).compareTo(LocalDate.of(2019, 1, 2))).isEqualTo(0);
     }
 }

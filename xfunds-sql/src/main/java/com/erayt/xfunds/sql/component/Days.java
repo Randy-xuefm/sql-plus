@@ -1,6 +1,11 @@
 package com.erayt.xfunds.sql.component;
 
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
+
+import java.time.LocalDate;
+import java.util.Arrays;
+import java.util.regex.Pattern;
 
 /**
  * Created by fenming.xue on 2020/6/28.
@@ -23,6 +28,15 @@ public class Days {
         this.year = Integer.parseInt(tempDate.substring(0,4));
         this.month = Integer.parseInt(tempDate.substring(4,6));
         this.day = Integer.parseInt(tempDate.substring(6,8));
+    }
+
+    public Days(String fileName){
+        Assert.state(StringUtils.hasLength(fileName),"Days构造函数参数为null");
+        String date = findDate(fileName);
+        this.date = date;
+        this.year = Integer.parseInt(date.substring(0,4));
+        this.month = Integer.parseInt(date.substring(4,6));
+        this.day = Integer.parseInt(date.substring(6,8));
     }
 
     public Integer getYear() {
@@ -57,11 +71,7 @@ public class Days {
     }
 
     public boolean match(String fileName){
-        int index = fileName.indexOf(getYearAndMonth());
-        if(index == -1){
-            return false;
-        }
-        String date = fileName.substring(index, index + 8);
+        String date = findDate(fileName);
 
         int day = 0;
         try {
@@ -72,7 +82,19 @@ public class Days {
         return day > this.day;
     }
 
+    private String findDate(String fileName){
+        String[] parts = fileName.split("_");
+        Assert.state(parts.length > 0, "文件名格式错误," +fileName);
 
+        return Arrays.stream(parts)
+                .filter(part -> Pattern.compile("[0-9]*").matcher(part).matches() && part.length() == 8)
+                .findFirst()
+                .orElse("");
+    }
+
+    public int compare(Days target){
+        return LocalDate.of(this.year,this.month,this.day).compareTo(LocalDate.of(target.getYear(), target.getMonth(), target.getDay()));
+    }
 
     @Override
     public String toString() {

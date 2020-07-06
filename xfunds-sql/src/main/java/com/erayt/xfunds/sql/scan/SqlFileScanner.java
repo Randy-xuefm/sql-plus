@@ -35,12 +35,12 @@ public class SqlFileScanner implements InitializingBean {
         this.config = config;
     }
 
-    public void scan(){
+    public List<File> scan(){
         File file = new File(this.config.getScanPackage());
 
         if(!file.isDirectory()){
             this.logger.warn("xfunds.sql.patch.scanPackage配置错误,{}",this.config.getScanPackage());
-            return;
+            return null;
         }
 
         List<File> sqlDirList = findSqlPath(file);
@@ -56,6 +56,8 @@ public class SqlFileScanner implements InitializingBean {
         this.logger.info("扫描到sql文件:{}",sqlFileList);
 
         copy2TargetPath(sqlFileList);
+
+        return sqlFileList;
     }
 
     private void copy2TargetPath(List<File> sqlFileList){
@@ -102,7 +104,7 @@ public class SqlFileScanner implements InitializingBean {
 
         List<File> sqlFileList = new ArrayList<>();
 
-        monthDirList.forEach(dir -> sqlFileList.addAll(Arrays.stream(Optional.ofNullable(dir.listFiles(filter -> days.match(filter.getName())))
+        monthDirList.forEach(dir -> sqlFileList.addAll(Arrays.stream(Optional.ofNullable(dir.listFiles(filter -> days.match(filter.getName()) && filter.getName().contains(".sql")))
                                                                                .orElse(new File[1])).collect(Collectors.toList())));
 
         return sqlFileList;
@@ -139,10 +141,9 @@ public class SqlFileScanner implements InitializingBean {
     public void afterPropertiesSet() {
         Assert.state(config != null,"增量扫描配置文件不允许为空!");
         Assert.state(StringUtils.hasLength(this.config.getScanPackage()),"xfunds.sql.patch.scanPackage不允许为空!");
-        Assert.state(this.config.getStartDate() != null,"xfunds.sql.patch.startDate不允许为空!");
+        Assert.state(this.config.getLastDate() != null,"xfunds.sql.patch.lastDate不允许为空!");
         Assert.state(StringUtils.hasLength(this.config.getTargetPackage()),"xfunds.sql.patch.targetPackage不允许为空");
 
-        this.scan();
     }
 }
 

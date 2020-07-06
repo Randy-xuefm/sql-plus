@@ -11,11 +11,6 @@
       "description": "数据库类型ORA|MYSQL|DB2.默认ORA."
     },
     {
-      "name": "xfunds.sql.patch.endDate",
-      "type": "java.lang.Integer",
-      "description": "增量脚本扫描结束日期,默认系统日期."
-    },
-    {
       "name": "xfunds.sql.patch.targetPackage",
       "type": "java.lang.String",
       "description": "将扫描到的文件复制到指定文件夹."
