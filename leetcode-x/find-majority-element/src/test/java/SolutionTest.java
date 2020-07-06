@@ -13,8 +13,20 @@ class SolutionTest {
     }
 
     @Test
-    public void majorityElement1(){
+    public void majorityElement1() {
+        int[] nums = {1, 2};
+        Assertions.assertEquals(-1, Solution.majorityElement(nums));
+    }
+
+    @Test
+    void majorityElement4moer() {
+        int[] nums= {1,2,2,2,2,2,3,3,1};
+        Assertions.assertEquals(2,Solution.majorityElement4moer(nums));
+    }
+
+    @Test
+    void majorityElement4moer1() {
         int[] nums= {1,2};
-        Assertions.assertEquals(-1,Solution.majorityElement(nums));
+        Assertions.assertEquals(-1,Solution.majorityElement4moer(nums));
     }
 }
