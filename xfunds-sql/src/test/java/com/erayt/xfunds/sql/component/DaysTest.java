@@ -35,5 +35,22 @@ class DaysTest {
         Days days = new Days(20190102);
 
         assertThat(days.match("patch_updateData_swap_20200619_02.sql")).isTrue();
+        assertThat(days.match("patch_updateData_swap_20190102_02.sql")).isTrue();
+    }
+
+    @Test
+    void matchDir() {
+        Days days = new Days(20190102);
+
+        assertThat(days.matchDir("201901")).isTrue();
+        assertThat(days.matchDir("202001")).isTrue();
+        assertThat(days.matchDir("201902")).isTrue();
+    }
+
+    @Test
+    public void subString(){
+        String s = "201901";
+        assertThat(s.substring(0,4)).isEqualTo("2019");
+        assertThat(s.substring(4,6)).isEqualTo("01");
     }
 }

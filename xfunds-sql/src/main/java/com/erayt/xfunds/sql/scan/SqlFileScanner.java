@@ -99,7 +99,7 @@ public class SqlFileScanner implements InitializingBean {
         Integer startDate = Optional.of(this.config.getLastDate()).orElse(this.config.getStartDate());
 
         Days days = new Days(startDate);
-        List<File> monthDirList = findPath(patchDirList,dir -> days.getYearAndMonth().equals(dir.getName()));
+        List<File> monthDirList = findPath(patchDirList,dir -> days.matchDir(dir.getName()));
         this.logger.info("扫描到日期目录,{}",monthDirList);
 
         List<File> sqlFileList = new ArrayList<>();

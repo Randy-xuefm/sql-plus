@@ -70,8 +70,12 @@ public class Days {
         return this.year + "" + this.month;
     }
 
+    public boolean matchDir(String dirName){
+        return this.year <= Integer.parseInt(dirName.substring(0, 4)) && this.month <= Integer.parseInt(dirName.substring(4, 6));
+    }
+
     public boolean match(String fileName){
-        return compare(new Days(fileName)) < 0;
+        return compare(new Days(fileName)) <= 0;
     }
 
     private String findDate(String fileName){
