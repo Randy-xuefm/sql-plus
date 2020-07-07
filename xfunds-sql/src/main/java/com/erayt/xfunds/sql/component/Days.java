@@ -71,15 +71,7 @@ public class Days {
     }
 
     public boolean match(String fileName){
-        String date = findDate(fileName);
-
-        int day = 0;
-        try {
-            day = Integer.parseInt(date.substring(6,8));
-        } catch (NumberFormatException e) {
-           //ignore
-        }
-        return day > this.day;
+        return compare(new Days(fileName)) < 0;
     }
 
     private String findDate(String fileName){

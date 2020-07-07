@@ -29,4 +29,11 @@ class DaysTest {
         assertThat(LocalDate.of(2019, 3, 2).compareTo(LocalDate.of(2019, 2, 3))).isEqualTo(1);
         assertThat(LocalDate.of(2019, 1, 2).compareTo(LocalDate.of(2019, 1, 2))).isEqualTo(0);
     }
+
+    @Test
+    public void match(){
+        Days days = new Days(20190102);
+
+        assertThat(days.match("patch_updateData_swap_20200619_02.sql")).isTrue();
+    }
 }
