@@ -3,6 +3,7 @@ package com.erayt.xfunds.sql.scan;
 import com.erayt.xfunds.sql.component.Days;
 import com.erayt.xfunds.sql.component.DbType;
 import com.erayt.xfunds.sql.config.PatchConfig;
+import com.erayt.xfunds.sql.utils.PathUtils;
 import com.google.common.collect.Lists;
 import com.google.common.io.Files;
 import org.slf4j.Logger;
@@ -62,6 +63,7 @@ public class SqlFileScanner implements InitializingBean {
 
     private void copy2TargetPath(List<File> sqlFileList){
         String targetDir =  this.config.getTargetPackage();
+        targetDir = PathUtils.cleanPath(targetDir);
         File dir = new File(targetDir);
         if(dir.exists()){
             File[] exists = dir.listFiles();
@@ -71,7 +73,7 @@ public class SqlFileScanner implements InitializingBean {
         }
         for (File file : sqlFileList) {
             try {
-                Files.copy(file,new File(targetDir+file.getName()));
+                Files.copy(file,new File(targetDir + File.separator + file.getName()));
             } catch (IOException e) {
                 this.logger.info("文件复制失败,{}{}",file.getAbsolutePath(),file.getName());
             }

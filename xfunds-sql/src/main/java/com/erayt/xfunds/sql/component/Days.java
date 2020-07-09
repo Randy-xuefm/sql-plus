@@ -31,8 +31,9 @@ public class Days {
     }
 
     public Days(String fileName){
-        Assert.state(StringUtils.hasLength(fileName),"Days构造函数参数为null");
+        Assert.state(StringUtils.hasLength(fileName),"Days构造函数参数为" + fileName);
         String date = findDate(fileName);
+        Assert.state(date.length() == 8,"Days构造函数参数为" + fileName);
         this.date = date;
         this.year = Integer.parseInt(date.substring(0,4));
         this.month = Integer.parseInt(date.substring(4,6));
@@ -71,7 +72,9 @@ public class Days {
     }
 
     public boolean matchDir(String dirName){
-        return this.year <= Integer.parseInt(dirName.substring(0, 4)) && this.month <= Integer.parseInt(dirName.substring(4, 6));
+        return Pattern.compile("[0-9]*").matcher(dirName).matches() &&
+                this.year <= Integer.parseInt(dirName.substring(0, 4)) &&
+                this.month <= Integer.parseInt(dirName.substring(4, 6));
     }
 
     public boolean match(String fileName){
@@ -79,6 +82,7 @@ public class Days {
     }
 
     private String findDate(String fileName){
+        fileName = StringUtils.stripFilenameExtension(fileName);
         String[] parts = fileName.split("_");
         Assert.state(parts.length > 0, "文件名格式错误," +fileName);
 

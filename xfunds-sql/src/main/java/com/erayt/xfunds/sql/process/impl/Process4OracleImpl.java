@@ -3,6 +3,7 @@ package com.erayt.xfunds.sql.process.impl;
 import com.erayt.xfunds.sql.component.Schema;
 import com.erayt.xfunds.sql.process.BatchProcess;
 import com.erayt.xfunds.sql.scan.SqlFileScanner;
+import com.erayt.xfunds.sql.utils.PathUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
@@ -31,6 +32,7 @@ public class Process4OracleImpl implements BatchProcess {
         if(schema == null || schema.isEmpty()){
             return;
         }
+        path = PathUtils.cleanPath(path);
         for (Map.Entry<String, Collection<String>> entry : schema.entrySet()) {
             new Shell().create(path,entry.getKey(),entry.getValue());
             new Bat().create(path,entry.getKey(),entry.getValue());
@@ -47,10 +49,13 @@ public class Process4OracleImpl implements BatchProcess {
     static class Shell{
 
         public void create(String path,String shFileName,Collection<String> exeFileNames) throws IOException {
-            File sh = createSHFile(path +shFileName+".sh");
-            try( BufferedWriter writer = new BufferedWriter(new FileWriter(sh))) {
+            File sh = createSHFile(path + File.separator + shFileName+".sh");
+            File sql = createSHFile(path+ File.separator + shFileName + "_sh.sql");
+            try( BufferedWriter writer = new BufferedWriter(new FileWriter(sh));
+                 BufferedWriter sqlWriter = new BufferedWriter(new FileWriter(sql))
+            ) {
                 writeHead(writer,shFileName, path);
-                writeBody(writer, exeFileNames);
+                writeBody(sqlWriter, exeFileNames);
             } catch (IOException e) {
                 logger.info("生成.sh文件错误",e);
             }
@@ -90,24 +95,29 @@ public class Process4OracleImpl implements BatchProcess {
             writer.newLine();
             writer.write("cd ${base_path}");
             writer.newLine();
+            writer.write("sqlplus $db_user/$db_pwd@//$db_serv @{sqlFileName}_sh.sql  >>log.log".replace("{sqlFileName}",schema));
+            writer.newLine();
+            writer.write("echo ::执行完成 日志请看脚本 log.log");
         }
 
         private void writeBody(BufferedWriter writer,Collection<String> fileNames) throws IOException {
             for (String fileName : fileNames) {
-                writer.write("sqlplus $db_user/$db_pwd@//$db_serv @{fileName}.sql  >>${base_path}/{fileName}.log".replace("{fileName}",fileName));
+                writer.write("@@{fileName}".replace("{fileName}",fileName));
                 writer.newLine();
             }
-
-            writer.write("echo end ecas sql....执行完成 日志请看脚本");
+            writer.write("quit;");
         }
     }
 
     static class Bat{
         public void create(String path,String shFileName,Collection<String> exeFileNames) throws IOException {
-            File sh = createSHFile(path +shFileName+".bat");
-            try( BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sh), "GBK"))) {
+            File sh = createSHFile(path + File.separator + shFileName+".bat");
+            File sql = createSHFile(path+ File.separator + shFileName + "_bat.sql");
+            try( BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sh), "GBK"));
+                 BufferedWriter sqlWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(sql), "GBK"))
+            ) {
                 writeHead(writer,shFileName, path);
-                writeBody(writer, exeFileNames);
+                writeBody(sqlWriter, exeFileNames);
             } catch (IOException e) {
                 logger.info("生成.sh文件错误",e);
             }
@@ -149,15 +159,21 @@ public class Process4OracleImpl implements BatchProcess {
             writer.newLine();
             writer.write("cd /d {}".replace("{}",path));
             writer.newLine();
+            writer.write("sqlplus %DB_USER%/%DB_PWD%@//%DB_SERV% @{sqlFileName}_bat.sql  >>log.log".replace("{sqlFileName}",schema));
+            writer.newLine();
+            writer.write("@echo ::执行完成 日志请看脚本 log.log");
+            writer.newLine();
+            writer.write("pause");
+            writer.newLine();
+            writer.write(":end");
         }
 
-        private void writeBody(BufferedWriter writer,Collection<String> fileNames) throws IOException {
+        private void writeBody(BufferedWriter sqlWriter,Collection<String> fileNames) throws IOException {
             for (String fileName : fileNames) {
-                writer.write("sqlplus %DB_USER%/%DB_PWD%@//%DB_SERV% @{fileName}.sql  >>../../../../pub/sql/oracle/{fileName}.log".replace("{fileName}",fileName));
-                writer.newLine();
+                sqlWriter.write("@@{fileName}".replace("{fileName}",fileName));
+                sqlWriter.newLine();
             }
-
-            writer.write("echo end ecas sql....执行完成 日志请看脚本");
+            sqlWriter.write("quit;");
         }
     }
 }
