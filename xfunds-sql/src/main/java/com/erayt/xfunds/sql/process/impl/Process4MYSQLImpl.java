@@ -16,6 +16,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 
@@ -34,11 +35,14 @@ public class Process4MYSQLImpl implements BatchProcess {
             return;
         }
         path = PathUtils.cleanPath(path);
+
+        Collection<String> fileNames = new ArrayList<>();
         for (Map.Entry<String, Collection<String>> entry : schema.entrySet()) {
-            new Shell().create(path, entry.getKey(), entry.getValue());
-            new Bat().create(path, entry.getKey(), entry.getValue());
+            fileNames.addAll(entry.getValue());
         }
 
+        new Shell().create(path, "xfunds", fileNames);
+        new Bat().create(path, "xfunds", fileNames);
     }
 
     static class Shell{
