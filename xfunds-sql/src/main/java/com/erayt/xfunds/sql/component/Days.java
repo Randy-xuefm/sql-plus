@@ -31,9 +31,9 @@ public class Days {
     }
 
     public Days(String fileName){
-        Assert.state(StringUtils.hasLength(fileName),"Days构造函数参数为" + fileName);
+        Assert.state(StringUtils.hasLength(fileName),"文件名错误,无法解析日期" + fileName);
         String date = findDate(fileName);
-        Assert.state(date.length() == 8,"Days构造函数参数为" + fileName);
+        Assert.state(date.length() == 8,"文件名错误,无法解析日期" + fileName);
         this.date = date;
         this.year = Integer.parseInt(date.substring(0,4));
         this.month = Integer.parseInt(date.substring(4,6));

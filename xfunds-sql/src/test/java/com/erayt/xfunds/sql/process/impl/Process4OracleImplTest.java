@@ -1,15 +1,9 @@
 package com.erayt.xfunds.sql.process.impl;
 
-import com.erayt.xfunds.sql.component.Schema;
-import com.erayt.xfunds.sql.scan.SqlSchemaParser;
 import com.erayt.xfunds.sql.utils.PathUtils;
 import org.junit.jupiter.api.Test;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Objects;
-import java.util.stream.Collectors;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -20,12 +14,12 @@ class Process4OracleImplTest {
 
     @Test
     void process() throws IOException {
-        String path = "C:\\Users\\xue\\Desktop\\sql\\";
-
-        Process4OracleImpl shProcess = new Process4OracleImpl();
-        SqlSchemaParser parser = new SqlSchemaParser(Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).collect(Collectors.toList()));
-        Schema schema = parser.parser();
-        shProcess.process(schema, path);
+//        String path = "C:\\Users\\xue\\Desktop\\sql\\";
+//
+//        Process4OracleImpl shProcess = new Process4OracleImpl();
+//        SqlSchemaParser parser = new SqlSchemaParser(Arrays.stream(Objects.requireNonNull(new File(path).listFiles())).collect(Collectors.toList()));
+//        Schema schema = parser.parser();
+//        shProcess.process(schema, path);
     }
 
     @Test

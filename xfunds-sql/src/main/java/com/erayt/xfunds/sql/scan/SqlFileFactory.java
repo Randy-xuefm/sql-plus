@@ -12,6 +12,7 @@ import org.springframework.util.Assert;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -41,7 +42,7 @@ public class SqlFileFactory implements InitializingBean {
         run();
     }
 
-    public void run() throws IOException {
+    public void run() throws IOException, URISyntaxException {
         List<File> sqlFileList = this.sqlFileScanner.scan();
         if(sqlFileList == null || sqlFileList.isEmpty()){
             return;
@@ -53,5 +54,7 @@ public class SqlFileFactory implements InitializingBean {
 
         Assert.state(process != null,"BatchProcess未找到具体的实现类,"+this.config.getDbType());
         process.process(schema,this.config.getTargetPackage());
+
+        LastDateWriter.writer();
     }
 }
