@@ -98,7 +98,7 @@ public class SqlFileScanner implements InitializingBean {
     }
 
     private List<File> findSqlFiles(List<File> patchDirList) throws IOException {
-        Integer startDate = Optional.of(LastDateWriter.getLast()).orElse(this.config.getLastDate());
+        Integer startDate = Optional.ofNullable(LastDateWriter.getLast()).orElse(this.config.getLastDate());
 
         Days days = new Days(startDate);
         List<File> monthDirList = findPath(patchDirList,dir -> days.matchDir(dir.getName()));

@@ -3,6 +3,7 @@ package com.erayt.xfunds.sql.scan;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.util.Assert;
+import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,6 +39,8 @@ public final class LastDateWriter {
         Properties properties = new Properties();
         properties.load(Files.newBufferedReader(Paths.get(System.getProperties().getProperty("user.home"),".xfunds-sql","options.properties")));
 
-        return Integer.valueOf(properties.getProperty("lastDate"));
+        String lastDate = properties.getProperty("lastDate");
+
+        return StringUtils.hasLength(lastDate) ? Integer.valueOf(lastDate) : null;
     }
 }
