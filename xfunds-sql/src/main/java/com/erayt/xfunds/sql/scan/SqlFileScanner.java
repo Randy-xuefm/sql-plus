@@ -36,7 +36,7 @@ public class SqlFileScanner implements InitializingBean {
         this.config = config;
     }
 
-    public List<File> scan(){
+    public List<File> scan() throws IOException {
         File file = new File(this.config.getScanPackage());
 
         if(!file.isDirectory()){
@@ -97,8 +97,8 @@ public class SqlFileScanner implements InitializingBean {
         return findPath(dbDirList,"patch");
     }
 
-    private List<File> findSqlFiles(List<File> patchDirList){
-        Integer startDate = Optional.of(this.config.getLastDate()).orElse(this.config.getStartDate());
+    private List<File> findSqlFiles(List<File> patchDirList) throws IOException {
+        Integer startDate = Optional.of(LastDateWriter.getLast()).orElse(this.config.getLastDate());
 
         Days days = new Days(startDate);
         List<File> monthDirList = findPath(patchDirList,dir -> days.matchDir(dir.getName()));

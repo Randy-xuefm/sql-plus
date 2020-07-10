@@ -2,15 +2,14 @@ package com.erayt.xfunds.sql.scan;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.util.Assert;
 
+import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.Objects;
 import java.util.Properties;
 
 /**
@@ -19,19 +18,26 @@ import java.util.Properties;
 public final class LastDateWriter {
     private static Logger logger = LoggerFactory.getLogger(LastDateWriter.class);
 
-    public static void writer() throws IOException, URISyntaxException {
+    public static void writer() throws IOException {
+        String userPath = System.getProperties().getProperty("user.home");
+        File sqlDir = new File(userPath,".xfunds-sql");
+        if(!sqlDir.exists()){
+            Assert.state(sqlDir.mkdir(),"创建xfunds-sql个人存档目录失败.");
+        }
         Properties properties = new Properties();
-
-        InputStream inputStream =LastDateWriter.class.getResourceAsStream("/application.properties");
-        properties.load(inputStream);
-
-        properties.setProperty("xfunds.sql.patch.lastDate", lastDate());
-        properties.store(Files.newBufferedWriter(Paths.get(Objects.requireNonNull(LastDateWriter.class.getClassLoader().getResource("application.properties")).toURI())), "修改最后执行日期");
-
-        logger.info("成功将这次执行日期写入文件:application.properties,{}",properties);
+        properties.setProperty("lastDate",lastDate());
+        properties.store(Files.newBufferedWriter(Paths.get(userPath,".xfunds-sql","options.properties")), "修改最后执行日期");
+        logger.info("成功将这次执行日期写入文件:options.properties,{}",properties);
     }
 
     private static String lastDate(){
         return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
+    }
+
+    public static Integer getLast() throws IOException {
+        Properties properties = new Properties();
+        properties.load(Files.newBufferedReader(Paths.get(System.getProperties().getProperty("user.home"),".xfunds-sql","options.properties")));
+
+        return Integer.valueOf(properties.getProperty("lastDate"));
     }
 }

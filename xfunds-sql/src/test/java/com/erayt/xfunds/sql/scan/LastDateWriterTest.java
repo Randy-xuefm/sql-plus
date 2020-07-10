@@ -3,8 +3,7 @@ package com.erayt.xfunds.sql.scan;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
-import java.nio.file.Path;
+import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -18,13 +17,20 @@ import static org.assertj.core.api.Assertions.assertThat;
 class LastDateWriterTest {
 
     @Test
-    void writer() throws IOException, URISyntaxException {
-        LastDateWriter writer = new LastDateWriter();
-        writer.writer();
+    void writer() throws IOException {
+        LastDateWriter.writer();
+
 
         Properties properties = new Properties();
-        properties.load(this.getClass().getResourceAsStream("/application.properties"));
-        assertThat(properties.getProperty("xfunds.sql.patch.lastDate")).isEqualTo("20200706") ;
+        properties.load(Files.newBufferedReader(Paths.get(System.getProperties().getProperty("user.home"),".xfunds-sql","options.properties")));
+        assertThat(properties.getProperty("lastDate")).isEqualTo("20200710") ;
+    }
+
+    @Test
+    void getLast() throws IOException {
+        Properties properties = new Properties();
+        properties.load(Files.newBufferedReader(Paths.get(System.getProperties().getProperty("user.home"),".xfunds-sql","options.properties")));
+        assertThat(properties.getProperty("lastDate")).isEqualTo("20200710") ;
     }
 
     @Test
@@ -35,14 +41,13 @@ class LastDateWriterTest {
     }
 
     @Test
-    void path() throws URISyntaxException {
-        Path path = Paths.get(this.getClass().getClassLoader().getResource("application.properties").toURI());
-
-        System.out.println(path.toString());
+    void windows(){
+        assert System.getProperties().getProperty("os.name").toUpperCase().contains("WINDOWS");
     }
 
     @Test
-    void windows(){
-        assert System.getProperties().getProperty("os.name").toUpperCase().contains("WINDOWS");
+    void userHome(){
+        String path = System.getProperties().getProperty("user.home");
+        System.out.println(path);
     }
 }

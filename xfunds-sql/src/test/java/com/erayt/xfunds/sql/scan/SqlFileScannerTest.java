@@ -3,7 +3,7 @@ package com.erayt.xfunds.sql.scan;
 import com.erayt.xfunds.sql.config.PatchConfig;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import java.io.IOException;
 
 /**
  * Created by fenming.xue on 2020/6/29.
@@ -13,7 +13,7 @@ class SqlFileScannerTest {
 
 
     @Test
-    void scan() {
+    void scan() throws IOException {
         PatchConfig config = new PatchConfig();
         config.setDbType("ORA");
         config.setScanPackage("E:\\WorkSpace\\xfunds_dev4.0");

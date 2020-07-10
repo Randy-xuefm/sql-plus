@@ -18,14 +18,6 @@ public class PatchConfig {
      */
     private String dbType;
     /**
-     * 增量脚本起始日期
-     */
-    private Integer startDate;
-    /**
-     * 增量脚本结束日期
-     */
-    private Integer endDate;
-    /**
      * 复制到指定文件夹
      */
     private String targetPackage;
@@ -51,22 +43,6 @@ public class PatchConfig {
         this.dbType = dbType;
     }
 
-    public Integer getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Integer startDate) {
-        this.startDate = startDate;
-    }
-
-    public Integer getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(Integer endDate) {
-        this.endDate = endDate;
-    }
-
     public String getTargetPackage() {
         return targetPackage;
     }
@@ -88,8 +64,6 @@ public class PatchConfig {
         return "PatchConfig{" +
                 "scanPackage='" + scanPackage + '\'' +
                 ", dbType='" + dbType + '\'' +
-                ", startDate=" + startDate +
-                ", endDate=" + endDate +
                 ", targetPackage='" + targetPackage + '\'' +
                 '}';
     }
