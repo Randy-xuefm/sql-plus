@@ -98,7 +98,7 @@ public class SqlFileScanner implements InitializingBean {
     }
 
     private List<File> findSqlFiles(List<File> patchDirList) throws IOException {
-        Integer startDate = Optional.ofNullable(LastDateWriter.getLast()).orElse(this.config.getLastDate());
+        Integer startDate = Optional.ofNullable(LastDateWriter.getLast(this.config.getDbType())).orElse(this.config.getLastDate());
 
         Days days = new Days(startDate);
         List<File> monthDirList = findPath(patchDirList,dir -> days.matchDir(dir.getName()));
@@ -117,20 +117,23 @@ public class SqlFileScanner implements InitializingBean {
         if(fileList == null || fileList.isEmpty()){
             return dirList;
         }
-        for (File subDir : fileList) {
+        fileList.parallelStream().forEach(subDir ->{
             if(!subDir.isDirectory()){
-                continue;
+                return;
+            }
+            if(this.config.getExcludeFilter().contains(subDir.getName())){
+                return;
             }
             if(predicate.test(subDir)){
                 dirList.add(subDir);
-                continue;
+                return;
             }
             File[] childrenDirs = subDir.listFiles();
             if(childrenDirs == null){
-                continue;
+                return;
             }
             dirList.addAll(findPath(Arrays.stream(childrenDirs).collect(Collectors.toList()), predicate));
-        }
+        });
 
         return dirList;
     }

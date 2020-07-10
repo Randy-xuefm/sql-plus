@@ -27,6 +27,8 @@ public class PatchConfig {
      */
     private Integer lastDate;
 
+    private String excludeFilter;
+
     public String getScanPackage() {
         return scanPackage;
     }
@@ -57,6 +59,14 @@ public class PatchConfig {
 
     public void setLastDate(Integer lastDate) {
         this.lastDate = lastDate;
+    }
+
+    public String getExcludeFilter() {
+        return excludeFilter;
+    }
+
+    public void setExcludeFilter(String excludeFilter) {
+        this.excludeFilter = excludeFilter;
     }
 
     @Override

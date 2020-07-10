@@ -55,6 +55,6 @@ public class SqlFileFactory implements InitializingBean {
         Assert.state(process != null,"BatchProcess未找到具体的实现类,"+this.config.getDbType());
         process.process(schema,this.config.getTargetPackage());
 
-        LastDateWriter.writer();
+        LastDateWriter.writer(this.config.getDbType());
     }
 }

@@ -18,19 +18,19 @@ class LastDateWriterTest {
 
     @Test
     void writer() throws IOException {
-        LastDateWriter.writer();
+        LastDateWriter.writer("ORA");
 
 
         Properties properties = new Properties();
         properties.load(Files.newBufferedReader(Paths.get(System.getProperties().getProperty("user.home"),".xfunds-sql","options.properties")));
-        assertThat(properties.getProperty("lastDate")).isEqualTo("20200710") ;
+        assertThat(properties.getProperty("ORA.lastDate")).isEqualTo("20200711") ;
     }
 
     @Test
     void getLast() throws IOException {
         Properties properties = new Properties();
         properties.load(Files.newBufferedReader(Paths.get(System.getProperties().getProperty("user.home"),".xfunds-sql","options.properties")));
-        assertThat(properties.getProperty("lastDate")).isEqualTo("20200710") ;
+        assertThat(properties.getProperty("ORA.lastDate")).isEqualTo("20200711") ;
     }
 
     @Test
