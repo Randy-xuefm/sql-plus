@@ -35,12 +35,17 @@ public final class LastDateWriter {
         return LocalDate.now().format(DateTimeFormatter.ofPattern("yyyyMMdd"));
     }
 
-    public static Integer getLast(String dbType) throws IOException {
-        Properties properties = new Properties();
-        properties.load(Files.newBufferedReader(Paths.get(System.getProperties().getProperty("user.home"),".xfunds-sql","options.properties")));
+    public static Integer getLast(String dbType) {
+        try {
+            Properties properties = new Properties();
+            properties.load(Files.newBufferedReader(Paths.get(System.getProperties().getProperty("user.home"),".xfunds-sql","options.properties")));
 
-        String lastDate = properties.getProperty(dbType.concat(".lastDate"));
+            String lastDate = properties.getProperty(dbType.concat(".lastDate"));
 
-        return StringUtils.hasLength(lastDate) ? Integer.valueOf(lastDate) : null;
+            return StringUtils.hasLength(lastDate) ? Integer.valueOf(lastDate) : null;
+        } catch (IOException e) {
+            logger.info("读取存档失败",e);
+            return null;
+        }
     }
 }

@@ -121,7 +121,7 @@ public class SqlFileScanner implements InitializingBean {
             if(!subDir.isDirectory()){
                 return;
             }
-            if(this.config.getExcludeFilter().contains(subDir.getName())){
+            if(StringUtils.hasLength(this.config.getExcludeFilter()) && this.config.getExcludeFilter().contains(subDir.getName())){
                 return;
             }
             if(predicate.test(subDir)){
