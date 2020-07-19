@@ -15,10 +15,7 @@ import org.springframework.util.StringUtils;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -58,7 +55,14 @@ public class SqlFileScanner implements InitializingBean {
 
         copy2TargetPath(sqlFileList);
 
-        return sqlFileList;
+
+        return getTargetPathFiles();
+    }
+
+    private List<File> getTargetPathFiles(){
+        File file = new File(this.config.getTargetPackage());
+
+        return Arrays.stream(Objects.requireNonNull(file.listFiles())).collect(Collectors.toList());
     }
 
     private void copy2TargetPath(List<File> sqlFileList){
@@ -71,9 +75,14 @@ public class SqlFileScanner implements InitializingBean {
         }else{
             Assert.state(dir.mkdir(),"创建文件路径失败," + targetDir);
         }
+        Set<String> fileNames  = new HashSet<>();
         for (File file : sqlFileList) {
             try {
-                Files.copy(file,new File(targetDir + File.separator + file.getName()));
+                String fileName = file.getName();
+                if(fileNames.add(file.getName())){
+                    fileName = fileName + UUID.randomUUID().toString();
+                }
+                Files.copy(file,new File(targetDir + File.separator + fileName));
             } catch (IOException e) {
                 this.logger.info("文件复制失败,{}{}",file.getAbsolutePath(),file.getName());
             }
