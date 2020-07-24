@@ -79,7 +79,7 @@ public class SqlFileScanner implements InitializingBean {
         for (File file : sqlFileList) {
             try {
                 String fileName = file.getName();
-                if(fileNames.add(file.getName())){
+                if(!fileNames.add(file.getName())){
                     fileName = fileName.replace(".sql","_" +UUID.randomUUID().toString()+".sql");
                 }
                 Files.copy(file,new File(targetDir + File.separator + fileName));
