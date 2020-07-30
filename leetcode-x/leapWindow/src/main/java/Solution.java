@@ -36,6 +36,13 @@ public class Solution {
         return totalSum;
     }
 
+    /**
+     * 给定一个字符串，请你找出其中不含有重复字符的 最长子串 的长度。
+     * 解题思路：
+     * 总共128个字符，用数组记录字符出现过的位置，快速移动左右指针。
+     * @param s
+     * @return
+     */
     public static int lengthOfLongestSubstring(String s) {
         if(s == null || s.length() <= 0){
             return 0;
