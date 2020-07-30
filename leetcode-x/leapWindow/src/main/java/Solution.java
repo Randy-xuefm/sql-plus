@@ -1,3 +1,5 @@
+
+
 /**
  * Created by fenming.xue on 2020/7/28.
  */
@@ -32,5 +34,20 @@ public class Solution {
         }
 
         return totalSum;
+    }
+
+    public static int lengthOfLongestSubstring(String s) {
+        if(s == null || s.length() <= 0){
+            return 0;
+        }
+
+        int[] m = new int[128];
+        int len = 0;
+        for(int i = 0, j = 0; j < s.length(); j++){
+            i = Math.max(m[s.charAt(j)], i);
+            len = Math.max(len, j - i + 1);
+            m[s.charAt(j)] = j + 1;
+        }
+        return len;
     }
 }

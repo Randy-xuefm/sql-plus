@@ -17,4 +17,27 @@ class SolutionTest {
 
         assertEquals(12,Solution.leapWindow(arr,3));
     }
+
+    @Test
+    void lengthOfLongestSubstring() {
+        String s = "abcabcbb";
+
+        assertEquals(3,Solution.lengthOfLongestSubstring(s));
+
+        s = "bbbbb";
+
+        assertEquals(1,Solution.lengthOfLongestSubstring(s));
+
+        s = "pwwkew";
+
+        assertEquals(3,Solution.lengthOfLongestSubstring(s));
+
+        s = "au";
+
+        assertEquals(2,Solution.lengthOfLongestSubstring(s));
+
+        s = "dvdf";
+
+        assertEquals(3,Solution.lengthOfLongestSubstring(s));
+    }
 }
