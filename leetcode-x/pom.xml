@@ -11,6 +11,7 @@
     <modules>
         <module>find-majority-element</module>
         <module>leapWindow</module>
+        <module>DynamicProgramming</module>
     </modules>
 
 
