@@ -72,9 +72,14 @@ public class Days {
     }
 
     public boolean matchDir(String dirName){
-        return Pattern.compile("[0-9]*").matcher(dirName).matches() &&
-                this.year <= Integer.parseInt(dirName.substring(0, 4)) &&
-                this.month <= Integer.parseInt(dirName.substring(4, 6));
+        boolean isNumber = Pattern.compile("[0-9]*").matcher(dirName).matches();
+
+        if(!isNumber){
+            return false;
+        }
+
+        return this.year < Integer.parseInt(dirName.substring(0, 4)) ||
+                (this.year == Integer.parseInt(dirName.substring(0, 4)) && this.month <= Integer.parseInt(dirName.substring(4, 6)));
     }
 
     public boolean match(String fileName){

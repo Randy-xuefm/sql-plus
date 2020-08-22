@@ -28,6 +28,8 @@ class DaysTest {
         assertThat(LocalDate.of(2019, 1, 2).compareTo(LocalDate.of(2019, 2, 3))).isEqualTo(-1);
         assertThat(LocalDate.of(2019, 3, 2).compareTo(LocalDate.of(2019, 2, 3))).isEqualTo(1);
         assertThat(LocalDate.of(2019, 1, 2).compareTo(LocalDate.of(2019, 1, 2))).isEqualTo(0);
+
+        assertThat(LocalDate.of(2019,1,2).compareTo(LocalDate.of(2020,9,1))).isEqualTo(-1);
     }
 
     @Test
@@ -36,15 +38,20 @@ class DaysTest {
 
         assertThat(days.match("patch_updateData_swap_20200619_02.sql")).isTrue();
         assertThat(days.match("patch_updateData_swap_20190102_02.sql")).isTrue();
+
+        assertThat(days.match("patch_updateData_swap_20180102_02.sql")).isFalse();
     }
 
     @Test
     void matchDir() {
-        Days days = new Days(20190102);
+        Days days = new Days(20191002);
 
-        assertThat(days.matchDir("201901")).isTrue();
+        assertThat(days.matchDir("201901")).isFalse();
         assertThat(days.matchDir("202001")).isTrue();
-        assertThat(days.matchDir("201902")).isTrue();
+        assertThat(days.matchDir("201902")).isFalse();
+        assertThat(days.matchDir("202002")).isTrue();
+        assertThat(days.matchDir("201809")).isFalse();
+        assertThat(days.matchDir("201911")).isTrue();
     }
 
     @Test
