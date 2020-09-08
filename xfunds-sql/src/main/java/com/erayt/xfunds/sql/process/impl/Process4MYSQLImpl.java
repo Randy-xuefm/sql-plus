@@ -49,9 +49,11 @@ public class Process4MYSQLImpl implements BatchProcess {
 
         public void create(String path,String shFileName,Collection<String> exeFileNames) throws IOException {
             File sh = createSHFile(path + File.separator + shFileName+".sh");
-            try(BufferedWriter writer = new BufferedWriter(new FileWriter(sh))) {
+            File sql = createSHFile(path+ File.separator + shFileName + "_sh.sql");
+            try(BufferedWriter writer = new BufferedWriter(new FileWriter(sh));
+            BufferedWriter sqlWriter = new BufferedWriter(new FileWriter(sql))) {
                 writeHead(writer,shFileName);
-                writeBody(writer, exeFileNames);
+                writeBody(sqlWriter, exeFileNames);
             } catch (IOException e) {
                 logger.info("生成.sh文件错误",e);
             }
@@ -93,15 +95,16 @@ public class Process4MYSQLImpl implements BatchProcess {
             writer.newLine();
             writer.write("cd ${base_path}");
             writer.newLine();
-
+            writer.write("mysql -u $db_user -p$db_pwd -h $db_serv  $db_name --default-character-set=utf8 < {sqlFileName}_sh.sql>>log.log".replace("{sqlFileName}",schema));
+            writer.newLine();
+            writer.write("echo ::执行完成 日志请看脚本 log.log");
         }
 
         private void writeBody(BufferedWriter writer,Collection<String> fileNames) throws IOException {
             for (String fileName : fileNames) {
-                writer.write("mysql -u $db_user -p$db_pwd -h $db_serv  $db_name --default-character-set=utf8   < {fileName}&>>log.log".replace("{fileName}",fileName));
+                writer.write("source {fileName}".replace("{fileName}",fileName));
                 writer.newLine();
             }
-            writer.write("echo ::执行完成 日志请看脚本 log.log");
         }
     }
 
