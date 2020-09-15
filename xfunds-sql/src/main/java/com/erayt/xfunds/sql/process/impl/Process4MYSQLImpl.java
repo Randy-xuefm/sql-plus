@@ -95,7 +95,7 @@ public class Process4MYSQLImpl implements BatchProcess {
             writer.newLine();
             writer.write("cd ${base_path}");
             writer.newLine();
-            writer.write("mysql -u $db_user -p$db_pwd -h $db_serv  $db_name --default-character-set=utf8 < {sqlFileName}_sh.sql>>log.log".replace("{sqlFileName}",schema));
+            writer.write("mysql -u $db_user -p$db_pwd -f -h $db_serv  $db_name --default-character-set=utf8 < {sqlFileName}_sh.sql>>log.log".replace("{sqlFileName}",schema));
             writer.newLine();
             writer.write("echo ::执行完成 日志请看脚本 log.log");
         }
@@ -164,7 +164,7 @@ public class Process4MYSQLImpl implements BatchProcess {
 
         private void writeBody(BufferedWriter sqlWriter,Collection<String> fileNames) throws IOException {
             for (String fileName : fileNames) {
-                sqlWriter.write("mysql -u %db_user% -p%db_pwd% -h %db_serv% %db_name% < {fileName}".replace("{fileName}",fileName));
+                sqlWriter.write("mysql -u %db_user% -p%db_pwd% -f -h %db_serv% %db_name% < {fileName}".replace("{fileName}",fileName));
                 sqlWriter.newLine();
             }
             sqlWriter.write("@echo ::执行完成");
