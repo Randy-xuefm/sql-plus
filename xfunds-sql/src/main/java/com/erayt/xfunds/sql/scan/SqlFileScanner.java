@@ -50,7 +50,7 @@ public class SqlFileScanner implements InitializingBean {
         List<File> patchDirList = findPatchPath(dbDirList);
         this.logger.info("扫描到patch目录:{}",patchDirList);
 
-        List<File> sqlFileList = findSqlFiles(patchDirList);
+        List<File> sqlFileList = findSqlFiles(this.findAllMonthFiles(patchDirList));
         this.logger.info("扫描到sql文件:{}",sqlFileList);
 
         copy2TargetPath(sqlFileList);
@@ -126,7 +126,7 @@ public class SqlFileScanner implements InitializingBean {
         if(fileList == null || fileList.isEmpty()){
             return dirList;
         }
-        fileList.parallelStream().forEach(subDir ->{
+        fileList.stream().forEach(subDir ->{
             if(!subDir.isDirectory()){
                 return;
             }
@@ -149,6 +149,18 @@ public class SqlFileScanner implements InitializingBean {
 
     private List<File> findPath(List<File> fileList,String matchDirName){
         return findPath(fileList, dir -> dir.getName().equals(matchDirName));
+    }
+
+    private List<File> findAllMonthFiles(List<File> fileList){
+        List<File> resultList = new ArrayList<>();
+        Optional.of(fileList).orElse(resultList).forEach(file -> {
+            if(file.isDirectory()){
+
+                resultList.addAll(Optional.ofNullable(file.listFiles()).map(files -> Arrays.stream(files).collect(Collectors.toList())).orElse(Lists.newArrayList()));
+            }
+        });
+
+        return resultList;
     }
 
     @Override
