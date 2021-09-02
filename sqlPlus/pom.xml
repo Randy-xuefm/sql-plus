@@ -8,10 +8,10 @@
         <version>2.3.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.erayt.xfunds</groupId>
-    <artifactId>xfunds-sql</artifactId>
+    <groupId>com.person.xue</groupId>
+    <artifactId>sql-plus</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>xfunds-sql</name>
+    <name>sql-plus</name>
     <description>find patch sql</description>
 
     <properties>
